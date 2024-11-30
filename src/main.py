@@ -22,7 +22,7 @@ async def createStudent(student : Student):
     result = studentCollection.insert_one(data)
     return {"id": str(result.inserted_id)}
 
-@app.get('/students', status_code=200, response_model=List[StudentList])
+@app.get('/students', status_code=200, response_model=StudentList)
 async def getStudentData(country : Optional[str] = Query(None), age : Optional[int] = Query(None)):
     query = {}
     if country:
@@ -32,7 +32,7 @@ async def getStudentData(country : Optional[str] = Query(None), age : Optional[i
         query["age"] = {"$gte": age}
     
     students = list(studentCollection.find(query,{"_id":0, "name":1, "age":1}))
-    return {"data": students}
+    return {'data': students}
 
 @app.get('/students/{id}', status_code=200, response_model=StudentResponse)
 def getStudentById(id : str = Path(...)):

@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import List
 
 class Address(BaseModel):
     city : str
@@ -14,7 +15,11 @@ class StudentResponse(BaseModel):
     age : int
     address : Address
 
-class StudentList(BaseModel):
+class Studentsdn(BaseModel):
     name : str
     age : int
+
+class StudentList(BaseModel):
+    data : List[Studentsdn]
+
 
