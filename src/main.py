@@ -12,6 +12,10 @@ conn = MongoClient(config['MONGO_URI'])
 db = conn.students
 studentCollection = db.student
 
+@app.get('/', status_code=200)
+def index():
+    return {"message": "Health Check Passed"}
+
 @app.post('/students', status_code=201, response_model=dict)
 async def createStudent(student : Student):
     data = student.dict()
