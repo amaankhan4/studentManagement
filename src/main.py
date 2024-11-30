@@ -25,19 +25,19 @@ async def getStudentData(country : Optional[str] = Query(None), age : Optional[i
         query["address.country"] = country
 
     if age:
-        query["age"] = age
+        query["age"] = {"$gte": age}
     
     students = list(studentCollection.find(query,{"_id":0, "name":1, "age":1}))
-    return students
+    return {"data": students}
 
 @app.get('/students/{id}', status_code=200, response_model=StudentResponse)
 def getStudentById(id : str = Path(...)):
-    if ObjectId.is_valid(id):
-        student = studentCollection.find_one({"_id":ObjectId(id)})
-        if student:
-            return student
-        raise HTTPException(status_code=404, detail="Student not found")
-    raise HTTPException(status_code=422, detail="Invalid ID")
+    if not ObjectId.is_valid(id):
+        raise HTTPException(status_code=422, detail="Invalid ID")
+    student = studentCollection.find_one({"_id":ObjectId(id)}, {"_id":0})
+    if student:
+        return student
+    raise HTTPException(status_code=404, detail="Student not found")
 
 @app.patch("/students/{id}", status_code=204)
 async def update_student(id: str, student: Student):

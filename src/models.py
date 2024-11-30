@@ -10,7 +10,6 @@ class Student(BaseModel):
     address : Address
 
 class StudentResponse(BaseModel):
-    # id : str = Field(..., alias="id")
     name : str
     age : int
     address : Address
